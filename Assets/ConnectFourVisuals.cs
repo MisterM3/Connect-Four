@@ -3,59 +3,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(MakeHoops))]
 public class ConnectFourVisuals : MonoBehaviour
 {
 
-
-    [SerializeField] GameObject Prefab;
-    [SerializeField] GameObject YellowPlayer;
-    [SerializeField] GameObject RedPlayer;
-    [SerializeField] float space;
+    private Vector3[] topRowPositions;
+    private Hoop[,] hoops;
+    [SerializeField] private MakeHoops makeHoops;
+    [SerializeField] private BallThrow ballThrowAnimation;
+    [SerializeField] private GameObject ball;
 
     private void OnEnable()
     {
-        Debug.Log(2);
-        Debug.Log(ConnectFourManager.Instance);
         ConnectFourManager.Instance.onBoardReset += ResetVisuals;
-        ConnectFourManager.Instance.onDiskAdded += AddDiskVisual;
+        ConnectFourManager.Instance.onDiskAdded += AddDisk;
     }
     private void OnDisable()
     {
         ConnectFourManager.Instance.onBoardReset -= ResetVisuals;
-        ConnectFourManager.Instance.onDiskAdded -= AddDiskVisual;
-
+        ConnectFourManager.Instance.onDiskAdded -= AddDisk;
     }
 
-    private void AddDiskVisual(Vector2Int arg1, Player arg2)
+    private void AddDisk(Vector2Int position, Player player)
     {
-        GameObject go = new();
 
-        if (arg2 == Player.PlayerOne)
-        {
-            go = YellowPlayer;
-        }
-        else if (arg2 == Player.PlayerTwo)
-        {
-            go = RedPlayer;
-        }
+        Vector3 rowPos = topRowPositions[position.x];
+        Vector3 finalPos = hoops[position.x, position.y].WorldPosition;
 
-        Instantiate(go, new Vector3(space * arg1.x, space * arg1.y), Quaternion.identity, this.transform);
+        //Plays animation before placing the disk
+        ballThrowAnimation.ThrowBallAnim(rowPos, finalPos, () => AddDiskVisual(position, player));
     }
+
+    private void AddDiskVisual(Vector2Int position, Player player)
+    {
+        hoops[position.x, position.y].SetDisk(player);
+    }
+
 
     public void ResetVisuals(object sender, Vector2Int dimensionsBoard)
     {
-        MakeBoard(dimensionsBoard);
+        if (topRowPositions == null) topRowPositions = new Vector3[dimensionsBoard.x];
+        if (hoops == null) hoops = new Hoop[dimensionsBoard.x, dimensionsBoard.y];
+        Debug.Log(makeHoops);
+        hoops = makeHoops.CreateHoops(dimensionsBoard.x, dimensionsBoard.y, out topRowPositions, out float ballSize);
+        ball.transform.localScale = new Vector3(ballSize, ballSize, ballSize);
     }
 
-    public void MakeBoard(Vector2Int dimensionsBoard)
-    {
-        for(int xPos = 0; xPos < dimensionsBoard.x; xPos++)
-        {
-            for (int yPos = 0; yPos < dimensionsBoard.y; yPos++)
-            {
-            //    Instantiate(Prefab, new Vector3(space * xPos, space * yPos), Quaternion.identity, this.transform);
-            }
-        }
-    }
 
 }
