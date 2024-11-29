@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallThrow : MonoBehaviour
+public class BallThrowAnimation : MonoBehaviour
 {
 
 
@@ -19,6 +19,16 @@ public class BallThrow : MonoBehaviour
     private void Awake()
     {
         startPositionBall = ball.transform.position;
+    }
+
+    private void Start()
+    {
+        ConnectFourManager.Instance.onTurnStart += ResetPosition;
+    }
+
+    private void ResetPosition(object sender, EventArgs e)
+    {
+        ball.transform.position = startPositionBall;
     }
 
     public void Update()
@@ -38,8 +48,9 @@ public class BallThrow : MonoBehaviour
     {
         float time = 0;
 
-        while (time < 1)
+        while ((time < 1))
         {
+            time = Mathf.Min(time + Time.deltaTime,1);
             float easyInOutValue = EaseInOutBack(time, downUp: downUp);
             float yValue = (startPositionBall.y * (1 - easyInOutValue)) + positionRowPos.y * (easyInOutValue);
 
@@ -47,22 +58,21 @@ public class BallThrow : MonoBehaviour
 
             float test = EaseInSine(time);
 
-                float zValue = (startPositionBall.z * (1 - test)) + positionRowPos.z * (test);
-               float xValue = (startPositionBall.x * (1 - test)) + positionRowPos.x * (test);
+            float zValue = (startPositionBall.z * (1 - test)) + positionRowPos.z * (test);
+            float xValue = (startPositionBall.x * (1 - test)) + positionRowPos.x * (test);
 
             ball.transform.position = new Vector3(xValue, yValue, zValue);
-            time += Time.deltaTime;
             yield return null;
         }
 
         time = 0;
         while (time < 1)
         {
+            time = Mathf.Min(time + Time.deltaTime, 1);
             float easyInOutValue = EaseOutSine(time);
             float yValue = (positionRowPos.y * (1 - easyInOutValue)) + finalSpotPos.y * (easyInOutValue);
 
             ball.transform.position = new Vector3(ball.transform.position.x, yValue, ball.transform.position.z);
-            time += Time.deltaTime;
             yield return null;
         }
 

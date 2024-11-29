@@ -26,9 +26,12 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
 
     public EventHandler<Player> onPlayerWon;
     public EventHandler<Vector2Int> onBoardReset;
+    public EventHandler onTurnStart;
     public Action<Vector2Int, Player> onDiskAdded;
+    public Action<int> onDiskMissed;
 
-    Player playerTurn;
+    private Player playerTurn;
+    public Player PlayerTurn => playerTurn;
 
     [SerializeField] private ConnectFourSolver _solver;
 
@@ -55,8 +58,9 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
     {
         if (!ConnectFourBoard.TryAddDisk(rowIndex, playerTurn, out int column))
         {
-            //Even though no disk is added, the turn is still over for the player
-            NextTurn();
+            //Even though no disk is added, the turn is still over for the player (make anim for this)
+            onDiskMissed?.Invoke(rowIndex);
+           // NextTurn();
             return;
         }
 
@@ -69,11 +73,11 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
             return;
         }
 
-        NextTurn();
+        //NextTurn();
     }
 
 
-    private void NextTurn()
+    public void NextTurn()
     {
         if (playerTurn == Player.PlayerOne)
         {
@@ -83,6 +87,8 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
         {
             playerTurn = Player.PlayerOne;
         }
+
+        onTurnStart?.Invoke(this, EventArgs.Empty);
     }
 
     private void EndGame(Player winner)

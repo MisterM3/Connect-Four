@@ -10,18 +10,20 @@ public class ConnectFourVisuals : MonoBehaviour
     private Vector3[] topRowPositions;
     private Hoop[,] hoops;
     [SerializeField] private MakeHoops makeHoops;
-    [SerializeField] private BallThrow ballThrowAnimation;
+    [SerializeField] private BallThrowAnimation ballThrowAnimation;
     [SerializeField] private GameObject ball;
 
     private void OnEnable()
     {
         ConnectFourManager.Instance.onBoardReset += ResetVisuals;
         ConnectFourManager.Instance.onDiskAdded += AddDisk;
+        ConnectFourManager.Instance.onDiskMissed += MissThrow;
     }
     private void OnDisable()
     {
         ConnectFourManager.Instance.onBoardReset -= ResetVisuals;
         ConnectFourManager.Instance.onDiskAdded -= AddDisk;
+        ConnectFourManager.Instance.onDiskMissed -= MissThrow;
     }
 
     private void AddDisk(Vector2Int position, Player player)
@@ -31,7 +33,24 @@ public class ConnectFourVisuals : MonoBehaviour
         Vector3 finalPos = hoops[position.x, position.y].WorldPosition;
 
         //Plays animation before placing the disk
-        ballThrowAnimation.ThrowBallAnim(rowPos, finalPos, () => AddDiskVisual(position, player));
+        ballThrowAnimation.ThrowBallAnim(rowPos, finalPos, () => AfterAnimation(position, player));
+    }
+
+    private void MissThrow(int position)
+    {
+        //Fix to have nice height
+        Vector3 rowPos = topRowPositions[position] - new Vector3(.75f, 0, 0);
+        Vector3 finalPos = topRowPositions[position] - new Vector3(.75f, 1, 0);
+
+        //Plays animation before placing the disk
+        ballThrowAnimation.ThrowBallAnim(rowPos, rowPos, () => ConnectFourManager.Instance.NextTurn());
+    }
+
+
+    private void AfterAnimation(Vector2Int position, Player player)
+    {
+        AddDiskVisual(position, player);
+        ConnectFourManager.Instance.NextTurn();
     }
 
     private void AddDiskVisual(Vector2Int position, Player player)
