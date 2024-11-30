@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class ShowWinner : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI _textField;
 
-    [SerializeField] TextMeshProUGUI textField;
-
+    //Using start and ondestroy as these events should be received even if the gameobject is disabled
     public void Start()
     {
         ConnectFourManager.Instance.onPlayerWon += SetWinner;
@@ -20,6 +18,7 @@ public class ShowWinner : MonoBehaviour
 
     public void SetWinner(object o, Player winner) => SetWinner(winner);
 
+    //I use a switch as it looks cleaner and more readable in this scenario
     public void SetWinner(Player winner)
     {
         string winnerText = "";
@@ -37,6 +36,6 @@ public class ShowWinner : MonoBehaviour
                 break;
         }
 
-        textField.text = winnerText;
+        _textField.text = winnerText;
     }
 }

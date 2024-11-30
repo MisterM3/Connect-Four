@@ -1,28 +1,27 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Basic SpotLights that change colour every couple seconds
+/// </summary>
 public class ArcadeLight : MonoBehaviour
 {
-
     [SerializeField] private Light _light;
-    [SerializeField] private float timeTillSwitch = 5f;
+    [SerializeField] private float _timeTillSwitch = 5f;
 
-
-    // Start is called before the first frame update
+    // Using a courotine instead of Update so I don't have to keep track of the timer myself and can just use WaitForSeconds
     void Start()
     {
         StartCoroutine(LightCourotine());
     }
 
-    
     public IEnumerator LightCourotine()
     {
         //Lights are on all the time, so keep an infinite loop for the courotine
         while(true)
         {
             SetRandomLightColor();
-            yield return new WaitForSeconds(timeTillSwitch);
+            yield return new WaitForSeconds(_timeTillSwitch);
         }
     }
 

@@ -1,9 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Generic board that for playing connect four
+/// </summary>
+/// Making the board with little connection to Unity makes it easy to use in different projects, or to use in base C#
 public class ConnectFourBoard
 {
+    /// The board consist of which player holds which square
     private Player[,] _connectFourBoard;
 
     public ConnectFourBoard(int rows, int columns)
@@ -22,10 +25,7 @@ public class ConnectFourBoard
         _connectFourBoard = new Player[rows, columns];
     }
 
-    public int GetLenght(int dimension)
-    {
-        return _connectFourBoard.GetLength(dimension);
-    }
+    public int GetLenght(int dimension) => _connectFourBoard.GetLength(dimension);
 
     public void ResetBoard()
     {
@@ -34,22 +34,13 @@ public class ConnectFourBoard
         _connectFourBoard = new Player[rows, columns];
     }
 
-    public Player GetPlayerAtLocation(Vector2Int location)
-    {
-        return GetPlayerAtLocation(location.x, location.y);
-    }
-
+    public Player GetPlayerAtLocation(Vector2Int location) => GetPlayerAtLocation(location.x, location.y);
     public Player GetPlayerAtLocation(int rowIndex, int columnIndex)
     {
         if (!IsValidPosition(rowIndex, columnIndex))
             return Player.None;
 
         return _connectFourBoard[rowIndex, columnIndex];
-    }
-
-    public bool IsValidPosition(Vector2Int location)
-    {
-        return IsValidPosition(location.x, location.y);
     }
 
     public bool IsBoardFull()
@@ -67,6 +58,7 @@ public class ConnectFourBoard
         return true;
     }
 
+    public bool IsValidPosition(Vector2Int location) => IsValidPosition(location.x, location.y);
     public bool IsValidPosition(int rowIndex, int columnIndex)
     {
 
@@ -89,6 +81,7 @@ public class ConnectFourBoard
 
 
 
+    /// For functions like these I try to keep only one with the logic, and the rest using that function so they are easily changed
     public bool TryAddDisk(int rowIndex, Player player)
     {
         //Don't need to use column so just discard the outcome by using _

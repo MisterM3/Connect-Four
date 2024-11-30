@@ -3,30 +3,33 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Simplistic State Machine for Enabling and Disabling UI
+/// </summary>
 public class UIStateMachine : Singleton<UIStateMachine>
 {
     //Using this system as dictionary are easier to use for getting items, but I can't serialize them
     [SerializeField] private List<UIObject> _uiStates;
     private Dictionary<UIStates, IStateUI> _uiStatesDict = new();
 
-    private UIStates currentState = UIStates.None;
+    private UIStates _currentState = UIStates.None;
 
-
-
+    //As I will never be calling this from outside this class and I'm only using it to make SerializedFields, I keep it at the top of the class with the variables
     [Serializable]
     private struct UIObject
     {
-        //Can't serialize interfaces, so this needs to be done like this
+        //Can't serialize interfaces, so this needs to be done like this, I don't have time to make a good serializable system for all classes
         public StateUISimple stateUI;
         public UIStates uiState;
     }
 
     private void Awake()
     {
-
         InitializeSingleton(this);
-
-        foreach(UIObject uiObject in _uiStates)
+    }
+    protected override void OnSingletonSucceedInitialize()
+    {
+        foreach (UIObject uiObject in _uiStates)
         {
             _uiStatesDict.Add(uiObject.uiState, uiObject.stateUI);
         }
@@ -35,23 +38,21 @@ public class UIStateMachine : Singleton<UIStateMachine>
         SwitchUI(UIStates.MainMenu);
     }
 
-    public void BackToMainMenu()
-    {
-        SwitchUI(UIStates.MainMenu);
-    }
+    //Used a lot, and has to be used in UnityEvents so I can't use a enum parameter
+    public void BackToMainMenu() => SwitchUI(UIStates.MainMenu);
 
     public void SwitchUI(UIStates state)
     {
-        if (currentState != UIStates.None)
+        if (_currentState != UIStates.None)
         {
-            DisableState(currentState);
+            DisableState(_currentState);
         }
 
-        currentState = state;
+        _currentState = state;
 
-        if (currentState != UIStates.None)
+        if (_currentState != UIStates.None)
         {
-            EnableState(currentState);
+            EnableState(_currentState);
         }
     }
 
@@ -65,6 +66,13 @@ public class UIStateMachine : Singleton<UIStateMachine>
         stateScript.DisableState();
 
     }
+    private void DisableAllStates()
+    {
+        foreach (IStateUI stateUI in _uiStatesDict.Values)
+        {
+            stateUI.DisableState();
+        }
+    }
 
     private void EnableState(UIStates state)
     {
@@ -75,22 +83,5 @@ public class UIStateMachine : Singleton<UIStateMachine>
         }
         stateScript.EnableState();
     }
-
-    private void DisableAllStates()
-    {
-        foreach(IStateUI stateUI in _uiStatesDict.Values)
-        {
-            stateUI.DisableState();
-        }
-    }
 }
 
-[Serializable]
-public enum UIStates
-{
-    None,
-    MainMenu,
-    Options,
-    Info,
-    EndingGame,
-}

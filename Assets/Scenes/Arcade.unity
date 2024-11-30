@@ -3308,7 +3308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a557485caee184c49aa9c303f011e1f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textField: {fileID: 384730945}
+  _textField: {fileID: 0}
 --- !u!1001 &482736997
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3815,7 +3815,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rows: 6
   _columns: 7
-  amountToWin: 4
+  _amountToWin: 4
   _solver: {fileID: 539904946}
 --- !u!4 &539904945
 Transform:
@@ -7067,7 +7067,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 488bbdb3a8ee0244c8d8c94a7f7aff3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiStateMachine: {fileID: 472806771}
+  _uiStateMachine: {fileID: 0}
 --- !u!1001 &1159929254
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7348,7 +7348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slider: {fileID: 1344619346}
-  volumePercentageText: {fileID: 345477864}
+  _volumePercentageText: {fileID: 0}
 --- !u!1001 &1216528610
 PrefabInstance:
   m_ObjectHideFlags: 0

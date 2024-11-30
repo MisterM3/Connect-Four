@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Abstract class to solve a connect four board
+/// </summary>
 public abstract class ConnectFourSolver : MonoBehaviour
 {
     protected ConnectFourBoard currentBoard;
