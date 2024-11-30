@@ -1,21 +1,22 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ThrowBall : MonoBehaviour
 {
 
-    [SerializeField] private float speed = 1;
-    private float amount = .5f;
-    public float Amount => amount;
-    private int direction = 1;
+    [SerializeField] private float _speed = 1;
+    private float _amount = .5f;
+    public float Amount => _amount;
+    private int _direction = 1;
 
-    private bool active = false;
+    private bool _active = false;
 
-    private float amountPerRow = 0;
+    //Calculates how far the width is to hit each row
+    private float _amountPerRow = 0;
 
 
+
+    /// Start and OnDestroy used for keeping track of visuals even if they are disabled
     private void Start()
     {
         ConnectFourManager.Instance.onBoardReset += ResetSlider;
@@ -23,82 +24,80 @@ public class ThrowBall : MonoBehaviour
         ConnectFourManager.Instance.onDiskMissed += DisableSlider;
         ConnectFourManager.Instance.onPlayerWon += DisableSlider;
         ConnectFourManager.Instance.onTurnStart += Activate;
-        amountPerRow = 1.0f / ConnectFourManager.Instance.BoardDimensions.x;
+        _amountPerRow = 1.0f / ConnectFourManager.Instance.BoardDimensions.x;
     }
 
-    private void DisableSlider(object sender, Player e)
+    void Update()
     {
-        SetActive(false);
+        if (!_active)
+            return;
+        UpdateAmount();
+
+        if (Input.anyKeyDown)
+        {
+            int rowBallToThrow = (int)(_amount / _amountPerRow);
+            ConnectFourManager.Instance.PlayTurn(rowBallToThrow);
+        }
     }
 
-    private void Activate(object sender, EventArgs e)
+    private void OnDestroy()
     {
-        SetActive(true);
+        ConnectFourManager.Instance.onBoardReset -= ResetSlider;
+        ConnectFourManager.Instance.onDiskAdded -= DisableSlider;
+        ConnectFourManager.Instance.onDiskMissed -= DisableSlider;
+        ConnectFourManager.Instance.onPlayerWon -= DisableSlider;
+        ConnectFourManager.Instance.onTurnStart -= Activate;
     }
 
-    private void DisableSlider(Vector2Int arg1, Player arg2)
-    {
-        SetActive(false);
-    }
+    /// Only thing using various events is that they all have different parameters, and I can't use anonymous functions as they won't work well when (un)subsribing from the events
+    private void DisableSlider(object sender, Player e) => DisableSlider(0);
+    private void DisableSlider(Vector2Int arg1, Player arg2) => DisableSlider(0);
+    private void DisableSlider(int i) => SetActive(false);
+    private void Activate(object sender, EventArgs e) => SetActive(true);
+    public void SetActive(bool active) => this._active = active;
 
 
-    private void DisableSlider(int i)
-    {
-        SetActive(false);
-    }
-
+    //Specifc setup for controlling the speed of the slider
+    public void Setup(float speed) => this._speed = speed;
+    
+    
     private void ResetSlider(object sender, Vector2Int boardDimensions)
     {
-        amountPerRow = 1.0f / boardDimensions.x;
+        _amountPerRow = 1.0f / boardDimensions.x;
         ResetAmount(true);
     }
 
-    public void Setup(float speed) => this.speed = speed;
 
-    public void SetActive(bool active) => this.active = active;
-
+    public void ResetAmount(bool active = true)
+    {
+        _amount = .5f;
+        SetActive(active);
+    }
     public void ResetAmount(float speed, bool active = true)
     {
         Setup(speed);
         ResetAmount(active);
     }
 
-    public void ResetAmount(bool active = true)
-    {
-        amount = .5f;
-        SetActive(active);
-    }
 
-    void Update()
-    {
-        if (!active)
-            return;
-        UpdateAmount();
-
-        if (Input.anyKeyDown)
-        {
-            int rowBallToThrow = (int)(amount / amountPerRow);
-            ConnectFourManager.Instance.PlayTurn(rowBallToThrow);
-        }
-    }
-
+    /// Makes sure the bar moves left and right with the correct time
     public void UpdateAmount()
     {
-        amount += speed * direction * Time.deltaTime;
+        _amount += _speed * _direction * Time.deltaTime;
 
-        if (amount >= 1 && direction == 1)
+        if (_amount >= 1 && _direction == 1)
         {
-            direction *= -1;
+            _direction *= -1;
 
             // Still keep the track on the correct amount by decreasing amount by the overflow
-            amount -= (amount - 1);
+            _amount -= (_amount - 1);
         }
-        else if (amount <= 0 && direction == -1)
+        else if (_amount <= 0 && _direction == -1)
         {
-            direction *= -1;
+            _direction *= -1;
 
             //Keep track by multiplying the minus amount
-            amount *= -1;
+            _amount *= -1;
         }
     }
 }

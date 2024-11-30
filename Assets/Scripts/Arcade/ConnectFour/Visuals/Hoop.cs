@@ -1,33 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Each hoop a disk/ball can sit in
+/// </summary>
 public class Hoop : MonoBehaviour
 {
-    [SerializeField] Transform midPointTransform;
-    [SerializeField] GameObject playerOneBall;
-    [SerializeField] GameObject playerTwoBall;
+    [SerializeField] private Transform _midPointTransform;
+    [SerializeField] private GameObject _playerOneBall;
+    [SerializeField] private GameObject _playerTwoBall;
 
-    public Vector3 WorldPosition => midPointTransform.position;
+    //Used for finding the final position for the disk the be in
+    public Vector3 WorldPosition => _midPointTransform.position;
 
+    //Enables the disk corresponindg to the player
     public void SetDisk(Player player)
     {
         if (player == Player.PlayerOne)
         {
-            playerOneBall.SetActive(true);
-            playerTwoBall.SetActive(false);
+            _playerOneBall.SetActive(true);
+            _playerTwoBall.SetActive(false);
         } 
         else if (player == Player.PlayerTwo)
         {
-            playerOneBall.SetActive(false);
-            playerTwoBall.SetActive(true);
+            _playerOneBall.SetActive(false);
+            _playerTwoBall.SetActive(true);
         }
     }
 
     public void ResetHoop()
     {
-        playerOneBall.SetActive(false);
-        playerTwoBall.SetActive(false);
+        _playerOneBall.SetActive(false);
+        _playerTwoBall.SetActive(false);
     }
 
 }

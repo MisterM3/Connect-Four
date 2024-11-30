@@ -675,9 +675,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d72e0cbeb921b74fb3c7abab94c4cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  midPointTransform: {fileID: 5375752679655929847}
-  playerOneBall: {fileID: 3787156835831797384}
-  playerTwoBall: {fileID: 8430067482918150448}
+  _midPointTransform: {fileID: 5375752679655929847}
+  _playerOneBall: {fileID: 3787156835831797384}
+  _playerTwoBall: {fileID: 8430067482918150448}
 --- !u!4 &6638368967091601870 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f5f70064e4e28eb4cb61b25f048d600e,

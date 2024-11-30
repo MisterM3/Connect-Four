@@ -2421,7 +2421,7 @@ GameObject:
   - component: {fileID: 384730946}
   - component: {fileID: 384730945}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: WinnerText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2725,11 +2725,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5659095897d99f459c9ac68a7c5755f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftWallHoop: {fileID: 2803151060364213922, guid: 4f54b49e1adefc3489084aee25b38a86,
+  _leftWallHoop: {fileID: 2803151060364213922, guid: 4f54b49e1adefc3489084aee25b38a86,
     type: 3}
-  hoop: {fileID: 6299385565951859572, guid: 75e842f3b7eceb04c94e07ee5f1909e2, type: 3}
-  parentMiddle: {fileID: 859415587}
-  backWall: {fileID: 688731510}
+  _hoop: {fileID: 6299385565951859572, guid: 75e842f3b7eceb04c94e07ee5f1909e2, type: 3}
+  _parentMiddle: {fileID: 859415587}
+  _backWall: {fileID: 688731510}
 --- !u!4 &425829166
 Transform:
   m_ObjectHideFlags: 0
@@ -2775,10 +2775,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18244ea620cdd8f46a936f92d1744063, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ball: {fileID: 1550266455}
-  posX: {fileID: 760649896}
-  multiply: 1.5
-  downUp: 3
+  _ball: {fileID: 1550266455}
 --- !u!1001 &428244133
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3308,7 +3305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a557485caee184c49aa9c303f011e1f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _textField: {fileID: 0}
+  _textField: {fileID: 384730945}
 --- !u!1001 &482736997
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7067,7 +7064,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 488bbdb3a8ee0244c8d8c94a7f7aff3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiStateMachine: {fileID: 0}
+  _uiStateMachine: {fileID: 472806771}
 --- !u!1001 &1159929254
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7348,7 +7345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slider: {fileID: 1344619346}
-  _volumePercentageText: {fileID: 0}
+  _volumePercentageText: {fileID: 345477864}
 --- !u!1001 &1216528610
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7528,10 +7525,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a2158f402a998644a3edeba546e1dcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  throwBall: {fileID: 1593171260}
-  objectVisualToMove: {fileID: 1123444962}
-  size: 1
-  currentPos: 0
+  _throwBall: {fileID: 1593171260}
+  _objectVisualToMove: {fileID: 1123444962}
+  _size: 1
+  _currentPos: 0
 --- !u!1001 &1261418174
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9167,8 +9164,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a775ffb88cbbb1943aa92f3366bf20d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerOneBall: {fileID: 1095669178}
-  playerTwoBall: {fileID: 1553984685}
+  _playerOneBall: {fileID: 1095669178}
+  _playerTwoBall: {fileID: 1553984685}
 --- !u!1 &1553984685 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6704660520135560628, guid: f00d8440736543e48a06a555c206eee2,
@@ -9451,7 +9448,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30d45d36715a5b44cacdd5b28b600ff2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  _speed: 1
 --- !u!1 &1594450696
 GameObject:
   m_ObjectHideFlags: 0

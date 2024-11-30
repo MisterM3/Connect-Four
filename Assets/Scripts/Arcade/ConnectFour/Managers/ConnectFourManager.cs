@@ -127,8 +127,8 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
         else
             ConnectFourBoard.ResetBoard();
 
-        onBoardReset?.Invoke(this, new Vector2Int(_rows, _columns));
         _playerTurn = Player.PlayerOne;
+        onBoardReset?.Invoke(this, new Vector2Int(_rows, _columns));
 
     }
 }

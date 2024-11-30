@@ -1,24 +1,20 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BallThrowAnimation : MonoBehaviour
 {
+    [SerializeField] private GameObject _ball;
+    private Vector3 _startPositionBall;
 
+    //How far the ball moves down and up when moving, after testing, 1 was a good value
+    private const float DOWN_UP = 1f;
 
-    [SerializeField] GameObject ball;
-    [SerializeField] Transform posX;
-
-    private Vector3 startPositionBall;
-    private Vector3 endPos;
-
-    public float multiply = 1f;
-    public float downUp = 1f;
-
+    
     private void Awake()
     {
-        startPositionBall = ball.transform.position;
+        //We need the startposition to reset the ball to
+        _startPositionBall = _ball.transform.position;
     }
 
     private void Start()
@@ -26,19 +22,15 @@ public class BallThrowAnimation : MonoBehaviour
         ConnectFourManager.Instance.onTurnStart += ResetPosition;
     }
 
-    private void ResetPosition(object sender, EventArgs e)
+    private void OnDestroy()
     {
-        ResetBall();
+        ConnectFourManager.Instance.onTurnStart -= ResetPosition;
     }
 
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            //StartCoroutine(ThrowBallAnimation());
-        }
-    }
+    private void ResetPosition(object sender, EventArgs e) => ResetBall();
+    public void ResetBall() => _ball.transform.position = _startPositionBall;
 
+    ///Using a courotine, as the animations plays over a lot of different frames
     public void ThrowBallAnim(Vector3 positionRow, Vector3 finalSpot, Action animationDone)
     {
         StartCoroutine(ThrowBallAnimation(positionRow, finalSpot, animationDone));
@@ -50,66 +42,35 @@ public class BallThrowAnimation : MonoBehaviour
 
         while ((time < 1))
         {
+            //Makes sure the last value is 1, so the animation always looks the same
             time = Mathf.Min(time + Time.deltaTime,1);
-            float easyInOutValue = EaseInOutBack(time, downUp: downUp);
-            float yValue = (startPositionBall.y * (1 - easyInOutValue)) + positionRowPos.y * (easyInOutValue);
+            float easyInOutValue = LerpFunctions.EaseInOutBack(time, downUp: DOWN_UP);
+            float yValue = (_startPositionBall.y * (1 - easyInOutValue)) + positionRowPos.y * (easyInOutValue);
 
             //Wait until the ball goes up to move it along the z axis
 
-            float test = EaseInSine(time);
+            float value = LerpFunctions.EaseInSine(time);
 
-            float zValue = (startPositionBall.z * (1 - test)) + positionRowPos.z * (test);
-            float xValue = (startPositionBall.x * (1 - test)) + positionRowPos.x * (test);
+            float zValue = (_startPositionBall.z * (1 - value)) + positionRowPos.z * (value);
+            float xValue = (_startPositionBall.x * (1 - value)) + positionRowPos.x * (value);
 
-            ball.transform.position = new Vector3(xValue, yValue, zValue);
+            _ball.transform.position = new Vector3(xValue, yValue, zValue);
             yield return null;
         }
 
         time = 0;
         while (time < 1)
         {
+            //Makes sure the last value is 1, so the animation always looks the same
             time = Mathf.Min(time + Time.deltaTime, 1);
-            float easyInOutValue = EaseOutSine(time);
+            float easyInOutValue = LerpFunctions.EaseOutSine(time);
             float yValue = (positionRowPos.y * (1 - easyInOutValue)) + finalSpotPos.y * (easyInOutValue);
 
-            ball.transform.position = new Vector3(ball.transform.position.x, yValue, ball.transform.position.z);
+            _ball.transform.position = new Vector3(_ball.transform.position.x, yValue, _ball.transform.position.z);
             yield return null;
         }
 
+        //Animation is done, now we can continue the next turn
         animationDone?.Invoke();
-    }
-
-
-    public float EaseInOutBack(float x, float downUp = 1.0158f)
-    {
-        float c1 = downUp;
-        float c2 = c1 * 1.525f;
-
-        if (x < .5f)
-        {
-            return ((Mathf.Pow(2 * x, 2) * ((c1 + 1) * 2 * x - c1)) / 2);
-        } else
-        {
-            return ((Mathf.Pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2);
-        }
-    }
-
-    public float EaseInSine(float x)
-    {
-        return 1 - Mathf.Cos((x * Mathf.PI) / 2f);
-    }
-
-    public float EaseOutSine(float x)
-    {
-        return Mathf.Sin((x * Mathf.PI) / 2);
-    }
-
-
-
-
-
-    public void ResetBall()
-    {
-        ball.transform.position = startPositionBall;
     }
 }
