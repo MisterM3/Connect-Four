@@ -9,15 +9,19 @@ public class MakeHoops : MonoBehaviour
     [SerializeField] private GameObject _leftWallHoop;
     [SerializeField] private GameObject _hoop;
 
-    [Space]
+    [Header("On Object")]
     //Position to use as parent for the hoops
     [SerializeField] private Transform _parentMiddle;
     [SerializeField] private GameObject _backWall;
+
+    //In the same frame gameobject don't get delted properly, do keep this one so all the temporary gameobjects are deleted between games
+    [SerializeField] private Transform _tempParent;
 
 
     public void DestroyHoops()
     {
         _parentMiddle.DestroyAllChildren();
+        _tempParent.DestroyAllChildren();
     }
 
     ///Creates all hoops for the machine itself by looking at the amount of rows and columns
@@ -66,9 +70,8 @@ public class MakeHoops : MonoBehaviour
             Transform rowTF = Instantiate(new GameObject(), new Vector3(-sizeHoop * xPos - sizeHoop * .5f, heightBackWall, zAmount), Quaternion.identity).transform;
             rowTF.SetParent(_parentMiddle, false);
             topPositions[xPos] = rowTF.position;
-            //Check if still works, or otherwise I keep copy till enxt turn
-            // DestroyImmediate(rowTF.gameObject);
-             Destroy(rowTF.gameObject);
+            //Put it on this parent, ready to be deleted (can't delete using Destroy, it won't delete the gameobject)
+            rowTF.SetParent(_tempParent);
 
         }
 
