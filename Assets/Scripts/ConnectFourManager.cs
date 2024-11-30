@@ -26,11 +26,16 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
 
     public EventHandler<Player> onPlayerWon;
     public EventHandler<Vector2Int> onBoardReset;
+    public EventHandler onTurnStart;
     public Action<Vector2Int, Player> onDiskAdded;
+    public Action<int> onDiskMissed;
 
-    Player playerTurn;
+    private Player playerTurn;
+    public Player PlayerTurn => playerTurn;
 
     [SerializeField] private ConnectFourSolver _solver;
+
+    private bool _hasEnded = false;
 
     private void Awake()
     {
@@ -45,6 +50,11 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
         
     }
 
+    private void Start()
+    {
+        onBoardReset?.Invoke(this, new Vector2Int(_rows, _columns));
+    }
+
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
@@ -55,8 +65,8 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
     {
         if (!ConnectFourBoard.TryAddDisk(rowIndex, playerTurn, out int column))
         {
-            //Even though no disk is added, the turn is still over for the player
-            NextTurn();
+            //Even though no disk is added, the turn is still over for the player (make anim for this)
+            onDiskMissed?.Invoke(rowIndex);
             return;
         }
 
@@ -64,16 +74,20 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
 
         if (_solver.IsWinningMove(rowIndex, column, playerTurn))
         {
-            onPlayerWon?.Invoke(this, playerTurn);
+            EndGame(playerTurn);
             Debug.Log($"{playerTurn} Won!");
             return;
         }
 
-        NextTurn();
+        if (ConnectFourBoard.IsBoardFull())
+        {
+            EndGame(Player.None);
+            Debug.Log("Draw");
+        }
     }
 
 
-    private void NextTurn()
+    public void NextTurn()
     {
         if (playerTurn == Player.PlayerOne)
         {
@@ -83,13 +97,15 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
         {
             playerTurn = Player.PlayerOne;
         }
+
+        onTurnStart?.Invoke(this, EventArgs.Empty);
     }
 
     private void EndGame(Player winner)
     {
         onPlayerWon?.Invoke(this, winner);
     }
-    private void StartGame()
+    public void StartGame()
     {
         Debug.Log("Started");
         ResetGame();

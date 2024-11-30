@@ -52,6 +52,21 @@ public class ConnectFourBoard
         return IsValidPosition(location.x, location.y);
     }
 
+    public bool IsBoardFull()
+    {
+        //-1 as I'm using the value to access an array
+        int topColumn = _connectFourBoard.GetLength(1) - 1;
+
+        for (int i = 0; i < _connectFourBoard.GetLength(0); i++)
+        {
+            if (_connectFourBoard[i, topColumn] == Player.None)
+                return false;
+        }
+
+        //The top row is full, so the board is full
+        return true;
+    }
+
     public bool IsValidPosition(int rowIndex, int columnIndex)
     {
 
