@@ -13,8 +13,6 @@ public class ConnectFourVisuals : MonoBehaviour
     [SerializeField] private BallThrowAnimation ballThrowAnimation;
     [SerializeField] private GameObject ball;
 
-
-
     private void OnEnable()
     {
         ConnectFourManager.Instance.onBoardReset += ResetVisuals;
@@ -52,7 +50,16 @@ public class ConnectFourVisuals : MonoBehaviour
     private void AfterAnimation(Vector2Int position, Player player)
     {
         AddDiskVisual(position, player);
-        ConnectFourManager.Instance.NextTurn();
+
+        if (ConnectFourManager.Instance.HasEnded)
+        {
+            UIStateMachine.Instance.SwitchUI(UIStates.EndingGame);
+            ballThrowAnimation.ResetBall();
+        }
+        else
+        {
+            ConnectFourManager.Instance.NextTurn();
+        }
     }
 
     private void AddDiskVisual(Vector2Int position, Player player)
@@ -65,7 +72,6 @@ public class ConnectFourVisuals : MonoBehaviour
     {
         if (topRowPositions == null) topRowPositions = new Vector3[dimensionsBoard.x];
         if (hoops == null) hoops = new Hoop[dimensionsBoard.x, dimensionsBoard.y];
-        Debug.Log(makeHoops);
         hoops = makeHoops.CreateHoops(dimensionsBoard.x, dimensionsBoard.y, out topRowPositions, out float ballSize);
         ball.transform.localScale = new Vector3(ballSize, ballSize, ballSize);
     }

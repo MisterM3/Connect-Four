@@ -5,7 +5,7 @@ using UnityEngine;
 public class ArcadeLight : MonoBehaviour
 {
 
-    [SerializeField] private Light light;
+    [SerializeField] private Light _light;
     [SerializeField] private float timeTillSwitch = 5f;
 
 
@@ -28,6 +28,6 @@ public class ArcadeLight : MonoBehaviour
 
     private void SetRandomLightColor()
     {
-        light.color = new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f));
+        _light.color = new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f));
     }
 }

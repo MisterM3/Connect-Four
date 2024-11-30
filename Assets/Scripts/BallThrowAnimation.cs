@@ -28,7 +28,7 @@ public class BallThrowAnimation : MonoBehaviour
 
     private void ResetPosition(object sender, EventArgs e)
     {
-        ball.transform.position = startPositionBall;
+        ResetBall();
     }
 
     public void Update()
@@ -110,6 +110,6 @@ public class BallThrowAnimation : MonoBehaviour
 
     public void ResetBall()
     {
-
+        ball.transform.position = startPositionBall;
     }
 }

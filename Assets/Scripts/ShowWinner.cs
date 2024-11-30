@@ -8,6 +8,18 @@ public class ShowWinner : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI textField;
 
+    public void Start()
+    {
+        ConnectFourManager.Instance.onPlayerWon += SetWinner;
+    }
+
+    public void OnDestroy()
+    {
+        ConnectFourManager.Instance.onPlayerWon -= SetWinner;
+    }
+
+    public void SetWinner(object o, Player winner) => SetWinner(winner);
+
     public void SetWinner(Player winner)
     {
         string winnerText = "";

@@ -77,8 +77,6 @@ public class ThrowBall : MonoBehaviour
 
         if (Input.anyKeyDown)
         {
-            if (Input.GetKey(KeyCode.T))
-                return;
             int rowBallToThrow = (int)(amount / amountPerRow);
             ConnectFourManager.Instance.PlayTurn(rowBallToThrow);
         }

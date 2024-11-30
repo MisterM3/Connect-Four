@@ -36,10 +36,10 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
     [SerializeField] private ConnectFourSolver _solver;
 
     private bool _hasEnded = false;
+    public bool HasEnded => _hasEnded;
 
     private void Awake()
     {
-        Debug.Log(1);
         InitializeSingleton(this);
         
         if (_solver == null)
@@ -89,6 +89,10 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
 
     public void NextTurn()
     {
+
+        if (_hasEnded)
+            return;
+
         if (playerTurn == Player.PlayerOne)
         {
             playerTurn = Player.PlayerTwo;
@@ -103,12 +107,14 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
 
     private void EndGame(Player winner)
     {
+        _hasEnded = true;
         onPlayerWon?.Invoke(this, winner);
     }
     public void StartGame()
     {
         Debug.Log("Started");
         ResetGame();
+        _hasEnded = false;
         _solver.SetupSolver(ConnectFourBoard, amountToWin);
     }
 
