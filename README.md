@@ -7,9 +7,11 @@ https://github.com/user-attachments/assets/64a3eeb2-c420-4c35-b74c-6972db1b17e6
 
 ## Scripts
 All scripts were made by me except for the easier functions which were grabbed from: https://easings.net/
+
 Inside the scripts there are also comments on why I did specifci things in my code, so look out for those
 ## Assets
 The basketball connect four machine, and UI were made by me using Blender and PyxelEdit
+
 The rest of the assets where gathered from the following sources:
 
 * Font: https://fonts.google.com/specimen/Tiny5?query=pixel
