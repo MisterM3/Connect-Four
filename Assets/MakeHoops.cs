@@ -70,7 +70,7 @@ public class MakeHoops : MonoBehaviour
 
         for(int i  = childCount - 1; i >= 0; i--)
         {
-            Destroy(parentMiddle.GetChild(i));
+            Destroy(parentMiddle.GetChild(i).gameObject);
            
         }
     }

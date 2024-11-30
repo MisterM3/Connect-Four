@@ -13,6 +13,8 @@ public class ConnectFourVisuals : MonoBehaviour
     [SerializeField] private BallThrowAnimation ballThrowAnimation;
     [SerializeField] private GameObject ball;
 
+
+
     private void OnEnable()
     {
         ConnectFourManager.Instance.onBoardReset += ResetVisuals;

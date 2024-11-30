@@ -35,6 +35,8 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
 
     [SerializeField] private ConnectFourSolver _solver;
 
+    private bool _hasEnded = false;
+
     private void Awake()
     {
         Debug.Log(1);
@@ -46,6 +48,11 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
             return;
         }
         
+    }
+
+    private void Start()
+    {
+        onBoardReset?.Invoke(this, new Vector2Int(_rows, _columns));
     }
 
     public void Update()
@@ -60,7 +67,6 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
         {
             //Even though no disk is added, the turn is still over for the player (make anim for this)
             onDiskMissed?.Invoke(rowIndex);
-           // NextTurn();
             return;
         }
 
@@ -68,12 +74,16 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
 
         if (_solver.IsWinningMove(rowIndex, column, playerTurn))
         {
-            onPlayerWon?.Invoke(this, playerTurn);
+            EndGame(playerTurn);
             Debug.Log($"{playerTurn} Won!");
             return;
         }
 
-        //NextTurn();
+        if (ConnectFourBoard.IsBoardFull())
+        {
+            EndGame(Player.None);
+            Debug.Log("Draw");
+        }
     }
 
 
@@ -95,7 +105,7 @@ public class ConnectFourManager : Singleton<ConnectFourManager>
     {
         onPlayerWon?.Invoke(this, winner);
     }
-    private void StartGame()
+    public void StartGame()
     {
         Debug.Log("Started");
         ResetGame();

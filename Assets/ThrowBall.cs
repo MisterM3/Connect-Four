@@ -21,8 +21,14 @@ public class ThrowBall : MonoBehaviour
         ConnectFourManager.Instance.onBoardReset += ResetSlider;
         ConnectFourManager.Instance.onDiskAdded += DisableSlider;
         ConnectFourManager.Instance.onDiskMissed += DisableSlider;
+        ConnectFourManager.Instance.onPlayerWon += DisableSlider;
         ConnectFourManager.Instance.onTurnStart += Activate;
         amountPerRow = 1.0f / ConnectFourManager.Instance.BoardDimensions.x;
+    }
+
+    private void DisableSlider(object sender, Player e)
+    {
+        SetActive(false);
     }
 
     private void Activate(object sender, EventArgs e)
@@ -34,6 +40,7 @@ public class ThrowBall : MonoBehaviour
     {
         SetActive(false);
     }
+
 
     private void DisableSlider(int i)
     {
