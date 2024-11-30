@@ -1,5 +1,6 @@
 # Connect Four
-An unity project of a small connect four game set in an arcade in made roughly 3 days.
+An unity project of a small connect four game set in an arcade in made roughly 3 days. 
+
 Play 1v1 versus a friend by shooting the ball whenever the arrow alligns with the row you want to shoot at, check the info in the game to find out more!
 
 https://github.com/user-attachments/assets/64a3eeb2-c420-4c35-b74c-6972db1b17e6
